@@ -145,6 +145,8 @@ and [security](docs/security.md) for the full contracts.
 cargo fmt --all --check
 cargo clippy --all-targets --all-features -- -D warnings
 cargo test --all-targets --all-features
+lua tests/plugin_entry.lua
+tests/install_integration.sh
 lua -e 'assert(loadfile("main.lua"))'
 scripts/manual-test.sh
 ```
@@ -205,6 +207,12 @@ from a different `YAZI_CONFIG_HOME`, or Yazi is older than 26.9.1.
 `archive-vfs-helper` not found means `~/.local/bin` is missing from `PATH`.
 Set `ARCHIVE_VFS_HELPER=/absolute/path/to/archive-vfs-helper` to verify the
 binary location without changing plugin source.
+
+Run Yazi with `YAZI_LOG=debug` to record plugin entry, helper probe, and VFS
+provider operations in `$XDG_STATE_HOME/yazi/yazi.log`, or
+`~/.local/state/yazi/yazi.log` when `XDG_STATE_HOME` is unset. Helper launch
+failures and rejected `.zip` or `.zipx` archives also produce visible Yazi
+notifications.
 
 Safety-limit errors identify the configured member-size or compression-ratio
 boundary. Change those values deliberately in `archive-vfs.toml`; do not

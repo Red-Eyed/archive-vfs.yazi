@@ -5,6 +5,7 @@ minimum_yazi=26.9.1
 bin_dir=${ARCHIVE_VFS_BIN_DIR:-"${HOME}/.local/bin"}
 script_dir=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 repository_root=$(dirname "$script_dir")
+build_dir=${CARGO_TARGET_DIR:-"$repository_root/target"}
 cd "$repository_root"
 
 if [ "$#" -ne 0 ]; then
@@ -54,7 +55,7 @@ esac
 
 cargo build --locked --release --bin archive-vfs-helper
 install -d "$bin_dir"
-install -m 755 target/release/archive-vfs-helper "$bin_dir/archive-vfs-helper"
+install -m 755 "$build_dir/release/archive-vfs-helper" "$bin_dir/archive-vfs-helper"
 
 echo "Installed archive-vfs-helper in $bin_dir"
 echo "The plugin configuration snippets are in README.md; this script did not edit Yazi configuration."

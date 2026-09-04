@@ -65,6 +65,15 @@ local function helper()
 	return os.getenv("ARCHIVE_VFS_HELPER") or "archive-vfs-helper"
 end
 
+local function notify(level, content)
+	ya.notify { title = "archive-vfs", content = content, level = level, timeout = 5 }
+end
+
+local function is_default_archive(url)
+	local extension = url.ext and url.ext:lower() or ""
+	return extension == "zip" or extension == "zipx"
+end
+
 local function run_output(args)
 	local output, err = Command(helper()):arg(args):output()
 	if not output then
@@ -492,6 +501,7 @@ M.Trash = readonly
 M.Write = readonly
 
 function M:provide(job)
+	ya.dbg("archive-vfs: provide", job.op, job.url)
 	local operation = self[job.op]
 	if not operation then
 		return readonly()
@@ -594,7 +604,25 @@ local function open_selected()
 	end
 end
 
+local function probe(file)
+	local path = tostring(file.url.path)
+	local status, err = Command(helper()):arg({ "probe", path }):status()
+	ya.dbg("archive-vfs: probe", path, status, err)
+	if not status then
+		notify("error", "Cannot run " .. helper() .. ": " .. tostring(err))
+		return false
+	end
+	if status.success then
+		return true
+	end
+	if is_default_archive(file.url) then
+		notify("warn", "The helper did not recognize this ZIP archive: " .. path)
+	end
+	return false
+end
+
 function M:entry(job)
+	ya.dbg("archive-vfs: entry", job.args)
 	if job.args[1] == "open" then
 		return open_selected()
 	end
@@ -609,8 +637,7 @@ function M:entry(job)
 	if file.is_mount then
 		return
 	end
-	local status = Command(helper()):arg({ "probe", tostring(file.url.path) }):status()
-	if status and status.success then
+	if probe(file) then
 		ya.emit("cd", { Url("archive://local/" .. tostring(file.url.path)) })
 	end
 end
