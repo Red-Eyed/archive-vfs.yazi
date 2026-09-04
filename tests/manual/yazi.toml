@@ -1,0 +1,10 @@
+[plugin]
+prepend_fetchers = [
+  { url = "archive://*", run = "archive-vfs", prio = "high", group = "mime" },
+]
+prepend_preloaders = [
+  { url = "archive://*", run = "archive-vfs" },
+]
+prepend_previewers = [
+  { url = "archive://*", run = "archive-vfs" },
+]

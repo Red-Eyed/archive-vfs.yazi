@@ -1,0 +1,14 @@
+[[mgr.prepend_keymap]]
+on = [ "l" ]
+run = "plugin archive-vfs"
+desc = "Enter a directory or supported archive"
+
+[[mgr.prepend_keymap]]
+on = [ "<Enter>" ]
+run = "plugin archive-vfs open"
+desc = "Open local files or materialized archive members"
+
+[[mgr.prepend_keymap]]
+on = [ "o" ]
+run = "plugin archive-vfs open"
+desc = "Open local files or materialized archive members"
