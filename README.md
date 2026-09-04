@@ -36,16 +36,14 @@ Requirements are Yazi 26.9.1+, stable Rust 1.85+, and `chmod`/`touch` for copied
 metadata. Everything is installed in the user's home directory.
 
 ```sh
-ya pkg add Red-Eyed/archive-vfs
-git clone https://github.com/Red-Eyed/archive-vfs.yazi.git
-cd archive-vfs.yazi
-scripts/install.sh
+mkdir -p ~/.config/yazi/plugins/archive-vfs.yazi && curl -fsSL https://github.com/Red-Eyed/archive-vfs.yazi/archive/refs/heads/main.tar.gz | tar -xz -C ~/.config/yazi/plugins/archive-vfs.yazi --strip-components=1 && ~/.config/yazi/plugins/archive-vfs.yazi/scripts/install.sh
 ```
 
-Alternatively, download the source and run the installer in one command:
+Alternatively, install from a Git checkout:
 
 ```sh
-mkdir -p ~/.config/yazi/plugins/archive-vfs.yazi && curl -fsSL https://github.com/Red-Eyed/archive-vfs.yazi/archive/refs/heads/main.tar.gz | tar -xz -C ~/.config/yazi/plugins/archive-vfs.yazi --strip-components=1 && ~/.config/yazi/plugins/archive-vfs.yazi/scripts/install.sh
+git clone https://github.com/Red-Eyed/archive-vfs.yazi.git ~/.config/yazi/plugins/archive-vfs.yazi
+~/.config/yazi/plugins/archive-vfs.yazi/scripts/install.sh
 ```
 
 Until the public repository exists, the equivalent local plugin layout is
@@ -225,7 +223,7 @@ remain on stdout and diagnostics remain on stderr.
 ## Uninstall
 
 ```sh
-ya pkg delete Red-Eyed/archive-vfs
+rm -r ~/.config/yazi/plugins/archive-vfs.yazi
 rm ~/.local/bin/archive-vfs-helper
 ```
 

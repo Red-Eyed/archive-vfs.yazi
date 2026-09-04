@@ -22,7 +22,12 @@ if ! command -v yazi >/dev/null 2>&1; then
 	exit 1
 fi
 
-yazi_version=$(yazi --version | sed -n 's/^[[:space:]]*Version:[[:space:]]*//p' | head -n 1)
+yazi_version=$(yazi --version | awk '
+	match($0, /[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/) {
+		print substr($0, RSTART, RLENGTH)
+		exit
+	}
+')
 if [ -z "$yazi_version" ]; then
 	echo "archive-vfs: could not determine the installed Yazi version" >&2
 	exit 1
